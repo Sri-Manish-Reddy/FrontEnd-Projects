@@ -1,6 +1,10 @@
+import './Checkout.css'
+import './checkout-header.css'
+
 export function Checkout() {
     return (
         <>
+          <title>Check out</title>
          <div className="checkout-header">
       <div className="header-content">
         <div className="checkout-header-left-section">
