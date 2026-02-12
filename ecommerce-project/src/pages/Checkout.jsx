@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import './Checkout.css'
 import './checkout-header.css'
 
-export function Checkout({ cart }) {
+export function Checkout({ cart,loadCart }) {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
   const [paymentSummary, setPaymentSummary] = useState(null);
   useEffect(() => {
@@ -19,7 +19,7 @@ export function Checkout({ cart }) {
     );
 
 
-  }, []);
+  }, [cart]);
   return (
     <>
       <title>Check out</title>
@@ -97,9 +97,18 @@ export function Checkout({ cart }) {
                               if (deliveryOption.priceCents > 0) {
                                 priceString = `$${(deliveryOption.priceCents / 100).toFixed(2)} - SHIPPING`;
                               }
-                              return (<div key={deliveryOption.id} className="delivery-option">
+                              const updatedDeliverOption=async()=>{
+                                await axios.put(`/api/cart-items/${cartItem.productId}`,{
+                                  deliveryOptionId:deliveryOption.id
+                                })
+                                await loadCart();
+                              }
+                              return (
+                              
+                              <div key={deliveryOption.id} className="delivery-option"
+                              onClick={updatedDeliverOption}>
                                 <input type="radio" checked={deliveryOption.id === cartItem.deliveryOptionId}
-                                  className="delivery-option-input"
+                                 onChange={()=>{}} className="delivery-option-input"
                                   name={`delivery-option-${cartItem.productId}`} />
                                 <div>
                                   <div className="delivery-option-date">
