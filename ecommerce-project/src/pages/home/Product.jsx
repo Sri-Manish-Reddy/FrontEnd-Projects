@@ -1,29 +1,13 @@
-import axios from 'axios';
-import { useEffect,useState } from 'react';
-import './HomePage.css'
-import { Header } from '../components/Header';
-export function HomePage({cart}) {
-const [products,setProducts]=useState([]);
+import { useState } from "react";
+import axios from "axios";
+export function Product({product,loadCart}){
 
-    useEffect(()=>{
-
- axios.get('/api/products')
-     .then((response)=>{
-             setProducts(response.data);
-      });
-
-    
-    },[]);
-    
+ const [quantity,setQuantity]=useState(1);
+ const selectQuantity=(evt)=>{
+                                setQuantity(Number(evt.target.value));
+                            };
     return (
-        <>
-            <Header  cart={cart}/>
-            <div className="home-page">
-                <div className="products-grid">
-                    {
-                        products.map((product) =>{
-return(
-                    <div key={product.id} className="product-container">
+        <div className="product-container">
                         <div className="product-image-container">
                             <img className="product-image"
                                 src={product.image}/>
@@ -45,7 +29,7 @@ return(
                         </div>
 
                         <div className="product-quantity-container">
-                            <select>
+                            <select value={quantity} onChange={selectQuantity}>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -66,17 +50,16 @@ return(
                             Added
                         </div>
 
-                        <button className="add-to-cart-button button-primary">
-                            Add to Cart
+                        <button className="add-to-cart-button button-primary" 
+                        onClick={async()=>{
+                           await axios.post('/api/cart-items',{
+                                productId:product.id,
+                                quantity:quantity
+                            });
+                             await loadCart();
+                        }}>
+                            Add to cart
                         </button>
                     </div>
-                    );
-    })
-}
-                    
-                </div>
-            </div>
-        </>
     );
-
 }
