@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import './Checkout.css'
 import './checkout-header.css'
+import { useNavigate } from 'react-router'
 
 export function Checkout({ cart,loadCart }) {
   const [deliveryOptions, setDeliveryOptions] = useState([]);
@@ -20,6 +21,13 @@ export function Checkout({ cart,loadCart }) {
 
 
   }, [cart]);
+const navigate=useNavigate();
+  const createOrder=async()=>{
+
+    await axios.post('/api/orders');
+    await loadCart()
+    navigate('/orders')
+  }
   return (
     <>
       <title>Check out</title>
@@ -51,12 +59,16 @@ export function Checkout({ cart,loadCart }) {
 
             {deliveryOptions.length > 0 &&
               cart.map((cartItem) => {
-
+            
                 const selectedDeliverOption = deliveryOptions.find(
                   (deliveryOption) => {
                     return deliveryOption.id === cartItem.deliveryOptionId;
                   }
                 );
+                            const deleteItem=async ()=>{
+              await axios.delete(`/api/cart-items/${cartItem.productId}`);
+              await loadCart();
+              };
                 return (
                   <div key={cartItem.productId} className="cart-item-container">
                     <div className="delivery-date">
@@ -80,7 +92,7 @@ export function Checkout({ cart,loadCart }) {
                           <span className="update-quantity-link link-primary">
                             Update
                           </span>
-                          <span className="delete-quantity-link link-primary">
+                          <span className="delete-quantity-link link-primary" onClick={deleteItem}>
                             Delete
                           </span>
                         </div>
@@ -162,7 +174,7 @@ export function Checkout({ cart,loadCart }) {
                     <div className="payment-summary-money"> ${(paymentSummary.totalCostCents / 100).toFixed(2)}</div>
                   </div>
 
-                  <button className="place-order-button button-primary">
+                  <button className="place-order-button button-primary" onClick={createOrder}>
                     Place your order
                   </button>
                 </>)
