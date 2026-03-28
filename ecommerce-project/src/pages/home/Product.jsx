@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+//make components seperate
 export function Product({product,loadCart}){
 
  const [quantity,setQuantity]=useState(1);
