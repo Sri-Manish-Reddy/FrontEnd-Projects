@@ -5,6 +5,7 @@ import { C } from '../utils/theme'
 import { fmt } from '../utils/format'
 import { TREND_DATA } from '../data/transactions'
 import SeesawChart from './SeeSaw'
+//check
 export default function OverviewTab({ transactions }) {
   const totalIncome   = useMemo(() => transactions.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0), [transactions])
   const totalExpenses = useMemo(() => transactions.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0), [transactions])
