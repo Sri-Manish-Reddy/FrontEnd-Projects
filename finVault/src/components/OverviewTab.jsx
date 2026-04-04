@@ -4,7 +4,7 @@ import { BalanceTrendChart, SpendingDonut, MonthlyBarChart } from './Charts'
 import { C } from '../utils/theme'
 import { fmt } from '../utils/format'
 import { TREND_DATA } from '../data/transactions'
-
+import SeesawChart from './SeeSaw'
 export default function OverviewTab({ transactions }) {
   const totalIncome   = useMemo(() => transactions.filter((t) => t.type === 'income').reduce((s, t) => s + t.amount, 0), [transactions])
   const totalExpenses = useMemo(() => transactions.filter((t) => t.type === 'expense').reduce((s, t) => s + t.amount, 0), [transactions])
@@ -25,6 +25,14 @@ export default function OverviewTab({ transactions }) {
         <SummaryCard title="Total Expenses" value={fmt(totalExpenses)}  sub={`${transactions.filter((t) => t.type === 'expense').length} transactions`} upTrend={false} color={C.red}   icon="arrowDown" />
       </div>
 
+
+
+<div style={{ float:'left', width: '75vh',background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '20px 22px' }}>
+  <div style={{ fontSize: 11, color: C.textDim, textTransform: 'uppercase', letterSpacing: 2, fontWeight: 600, marginBottom: 4 }}>
+    Income vs Expenses Balance
+  </div>
+  <SeesawChart />
+</div>
       {/* Charts row */}
       <div className="grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 16, marginBottom: 20 }}>
         <div style={{ background: C.card, border: `1px solid ${C.border}`, borderRadius: 12, padding: '20px 22px' }}>
